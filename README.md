@@ -1,37 +1,28 @@
-# Pixel-Perfect React Dashboard Assignment
+# Figma Checkout UI Assignment
 
-A responsive React implementation of a high-fidelity Figma-style dashboard using Vite, Tailwind CSS, and reusable components.
+A React JS implementation of the provided Figma checkout screen, including the billing details form, order summary, coupon section, wallet balance card, top navigation bar, and responsive layout.
 
 ## Tech Stack
 
 - Vite + React
-- Tailwind CSS with custom design tokens
+- CSS for pixel-focused layout styling
 - Lucide React icons
-- Component-based architecture
 
-## How to Run Locally
+## How to Run
 
 ```bash
 npm install
-npm run dev
+npm.cmd run dev
 ```
 
-## Project Highlights
-
-- Responsive shell with desktop sidebar and mobile drawer navigation
-- Interactive tabs, search filtering, modal dialog, and status controls
-- Organized folder structure for common, layout, and dashboard components
-- Design tokens for colors, typography, radius, and shadows in `tailwind.config.js`
-
-## Structure
+Then open the local URL shown in the terminal, usually:
 
 ```text
-src/
-  assets/
-  components/
-    common/
-    dashboard/
-    layout/
-  hooks/
-  utils/
+http://127.0.0.1:5173/
+```
+
+## Build
+
+```bash
+npm.cmd run build
 ```

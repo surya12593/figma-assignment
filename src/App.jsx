@@ -1,89 +1,176 @@
-import { useMemo, useState } from 'react';
-import { Bell, Download, Plus } from 'lucide-react';
-import Button from './components/common/Button.jsx';
-import LayoutWrapper from './components/layout/LayoutWrapper.jsx';
-import Tabs from './components/dashboard/Tabs.jsx';
-import AnalyticsCard from './components/dashboard/AnalyticsCard.jsx';
-import DataTable from './components/dashboard/DataTable.jsx';
-import ActivityPanel from './components/dashboard/ActivityPanel.jsx';
-import ProjectModal from './components/dashboard/ProjectModal.jsx';
-import { metrics, projects } from './utils/data.js';
+import React from 'react';
+import { ChevronDown, ChevronLeft, Menu, Search, ShieldCheck, Tag, UserCircle, Wallet } from 'lucide-react';
+
+const formRows = [
+  [
+    { label: 'Company Name', placeholder: 'abhigyan', active: true },
+    { label: 'Email', placeholder: 'abhigyan.pandey@getreelax.com' },
+  ],
+  [
+    { label: 'GST Number (Optional)', placeholder: 'GST Number' },
+    { label: 'PAN Number (Optional)', placeholder: 'PAN Number' },
+  ],
+  [
+    { label: 'Premise/House no.', placeholder: 'Premise/House no.' },
+    { label: 'Street', placeholder: 'Street' },
+  ],
+  [
+    { label: 'State', placeholder: 'Select state', select: true },
+    { label: 'City', placeholder: 'Select city', select: true },
+  ],
+  [
+    { label: 'Country', placeholder: 'India' },
+    { label: 'Pin Code', placeholder: 'Pincode' },
+  ],
+];
 
 export default function App() {
-  const [activeTab, setActiveTab] = useState('overview');
-  const [query, setQuery] = useState('');
-  const [statusFilter, setStatusFilter] = useState('all');
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
-  const filteredProjects = useMemo(() => {
-    return projects.filter((project) => {
-      const matchesSearch = `${project.name} ${project.owner}`
-        .toLowerCase()
-        .includes(query.toLowerCase());
-      const matchesStatus = statusFilter === 'all' || project.status === statusFilter;
-
-      return matchesSearch && matchesStatus;
-    });
-  }, [query, statusFilter]);
-
   return (
-    <LayoutWrapper query={query} onQueryChange={setQuery}>
-      <section className="flex flex-col gap-6">
-        <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-          <div>
-            <p className="text-sm font-semibold uppercase tracking-[0.18em] text-brand-600">
-              Figma conversion
-            </p>
-            <h1 className="mt-2 font-heading text-3xl font-bold text-ink-900 sm:text-4xl">
-              Product analytics dashboard
-            </h1>
-            <p className="mt-3 max-w-2xl text-sm leading-6 text-ink-500 sm:text-base">
-              A responsive implementation with reusable components, tokenized styling, and polished interaction states.
-            </p>
+    <div className="checkout-shell">
+      <header className="topbar">
+        <label className="search-box">
+          <input type="text" placeholder="Find influencers to collaborate with" />
+          <Search size={15} strokeWidth={1.8} />
+        </label>
+
+        <div className="header-actions">
+          <button className="upgrade-btn">
+            <ShieldCheck size={12} fill="currentColor" />
+            Upgrade
+          </button>
+          <button className="campaign-btn">+ Create Campaign</button>
+          <button className="avatar-btn" aria-label="Profile">
+            <UserCircle size={22} fill="#2f80ed" color="#2f80ed" />
+          </button>
+          <button className="menu-btn" aria-label="Open menu">
+            <Menu size={21} />
+          </button>
+        </div>
+      </header>
+
+      <main className="checkout-body">
+        <section className="checkout-grid">
+          <div className="left-column">
+            <a className="back-link" href="#">
+              <ChevronLeft size={15} />
+              <span>Back to plans</span>
+            </a>
+
+            <section className="details-card">
+              <h1>Review your details</h1>
+              <h2>Billing Information</h2>
+
+              <form className="billing-form">
+                {formRows.map((row) => (
+                  <div className="form-row" key={row.map((field) => field.label).join('-')}>
+                    {row.map((field) => (
+                      <label className="field" key={field.label}>
+                        <span>{field.label}</span>
+                        <div className={field.active ? 'input-wrap active' : 'input-wrap'}>
+                          <input type="text" placeholder={field.placeholder} />
+                          {field.select && <ChevronDown size={14} color="#2878ef" />}
+                        </div>
+                      </label>
+                    ))}
+                  </div>
+                ))}
+
+                <div className="form-divider" />
+
+                <div className="form-actions">
+                  <button type="button" className="cancel-btn">
+                    Cancel
+                  </button>
+                  <button type="button" className="save-btn">
+                    Save Details
+                  </button>
+                </div>
+              </form>
+            </section>
           </div>
 
-          <div className="flex flex-wrap items-center gap-3">
-            <Button variant="secondary" icon={Bell} ariaLabel="Open notifications" />
-            <Button variant="secondary" icon={Download}>
-              Export
-            </Button>
-            <Button icon={Plus} onClick={() => setIsModalOpen(true)}>
-              New project
-            </Button>
-          </div>
-        </div>
+          <aside className="summary-column">
+            <section className="summary-card">
+              <h2>Order Summary</h2>
 
-        <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-          {metrics.map((metric) => (
-            <AnalyticsCard key={metric.title} {...metric} />
-          ))}
-        </div>
+              <div className="plan-box">
+                <div>
+                  <div className="price">₹4,999<span>/month</span></div>
+                  <p>Includes 5,000 credits/mo.</p>
+                </div>
+                <div className="selected-plan">
+                  <span>SELECTED PLAN</span>
+                  <strong>Startup</strong>
+                </div>
+              </div>
 
-        <div className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_360px]">
-          <div className="rounded-figma-lg border border-ink-200 bg-white p-4 shadow-figma-sm sm:p-6">
-            <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-              <Tabs activeTab={activeTab} onTabChange={setActiveTab} />
-              <select
-                value={statusFilter}
-                onChange={(event) => setStatusFilter(event.target.value)}
-                className="h-10 rounded-figma-md border border-ink-200 bg-white px-3 text-sm font-medium text-ink-700"
-                aria-label="Filter projects by status"
-              >
-                <option value="all">All statuses</option>
-                <option value="healthy">Healthy</option>
-                <option value="at-risk">At risk</option>
-                <option value="paused">Paused</option>
-              </select>
-            </div>
+              <button className="growth-btn">⊕ Upgrade to Growth Plan</button>
+            </section>
 
-            <DataTable projects={filteredProjects} activeTab={activeTab} />
-          </div>
+            <section className="payment-card">
+              <div className="wallet-row">
+                <Wallet size={15} color="#2878ef" />
+                <div>
+                  <strong>Wallet Balance</strong>
+                  <span>₹500.00 available</span>
+                </div>
+                <button>Apply</button>
+              </div>
 
-          <ActivityPanel />
-        </div>
-      </section>
+              <div className="coupon-card">
+                <div className="coupon-header">
+                  <div>
+                    <Tag size={15} />
+                    <strong>Apply Coupon</strong>
+                  </div>
+                  <ChevronDown size={15} />
+                </div>
 
-      <ProjectModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
-    </LayoutWrapper>
+                <div className="coupon-input">
+                  <input type="text" placeholder="Enter coupon code" />
+                  <button>Apply</button>
+                </div>
+
+                <label className="coupon-option selected">
+                  <span>
+                    <strong>WELCOME20</strong>
+                    <em>20% off on your first month</em>
+                  </span>
+                  <input type="radio" name="coupon" defaultChecked />
+                </label>
+
+                <label className="coupon-option">
+                  <span>
+                    <strong>ANNUAL50</strong>
+                    <em>50% off on annual plans</em>
+                  </span>
+                  <input type="radio" name="coupon" />
+                </label>
+              </div>
+
+              <div className="totals">
+                <div>
+                  <span>Subtotal</span>
+                  <strong>₹14,999.00</strong>
+                </div>
+                <div>
+                  <span>Tax (18% GST)</span>
+                  <strong>₹1,079.64</strong>
+                </div>
+              </div>
+
+              <div className="due-row">
+                <strong>Total due today</strong>
+                <span>16,078.64</span>
+              </div>
+
+              <button className="payment-btn">Proceed to Payment</button>
+            </section>
+          </aside>
+        </section>
+
+        <button className="floating-help">T</button>
+      </main>
+    </div>
   );
 }
